@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configMapName }}
+  namespace: kafka
+data:
+  PORT: "{{ .Values.application.port }}"
+  DB_PORT: "{{ .Values.postgres.port }}"
+  DB_HOSTNAME: {{ .Release.Name }}-postgresql
+  DB_DBNAME: "{{ .Values.postgres.database }}"
+  DB_USERNAME: "{{ .Values.postgres.username }}"
+  DB_PASSWORD: "{{ .Values.postgres.password }}"
+  DB_SCHEMA: "{{ .Values.postgres.schema }}"
+  KAFKA_BROKERS: "{{ .Values.kafkavalues.brokers | join `,` }}"
+  KAFKA_TOPIC: "{{ .Values.kafkavalues.topic }}"
+
+
+ 
