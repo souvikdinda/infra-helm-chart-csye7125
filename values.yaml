@@ -1,0 +1,70 @@
+# Default values for consumer-chart
+
+# Replica count for the application
+replicaCount: 1
+
+# Image details for the  consumer application 
+image:
+  repository: quay.io/csye-7125/consumerapplication
+  pullPolicy: IfNotPresent
+  tag: latest
+
+# Target port on which the consumer application is running
+application:
+  port: 3000
+
+# Deployment strategies to be followed
+deploymentStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 0
+  minReadySeconds: 30
+  progressDeadlineSeconds: 120
+
+configMapName: consumer-configmap
+
+# Override the values of postgresql subchart
+postgresql:
+  enabled: true
+  auth:
+    username: csye7125
+    password: postgres
+    database: consumer
+
+# Schema used for the application
+postgres:
+  schema: public
+  port: 5432
+  username: csye7125
+  password: postgres
+  database: consumer
+
+  primary:
+      persistence:
+      enabled: true
+      size: 8Gi
+      storageClass: standard
+      accessMode: ReadWriteOnce
+
+kafkavalues:
+  brokers: 
+    - infra-kafka-controller-0.infra-kafka-controller-headless.kafka.svc.cluster.local:9092
+    - infra-kafka-controller-1.infra-kafka-controller-headless.kafka.svc.cluster.local:9092
+    - infra-kafka-controller-2.infra-kafka-controller-headless.kafka.svc.cluster.local:9092
+  topic: healthcheck
+ 
+# Override the values of kafka subchart 
+kafka:
+    listeners:
+      client: 
+        protocol: PLAINTEXT
+      controller:
+        protocol: PLAINTEXT
+    provisioning:
+      enabled: true  
+      numPartitions: 3  
+      replicationFactor: 3
+      topics:
+        - name: healthcheck
+
