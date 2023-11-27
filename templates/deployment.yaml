@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name}}-consumer
-  namespace: kafka
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "infra-chart.labels" . | nindent 4 }}
 spec:
@@ -25,7 +25,7 @@ spec:
     spec:
       serviceAccountName: consumer-sa
       imagePullSecrets:
-        - name: regcred
+        - name: quay-creds
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

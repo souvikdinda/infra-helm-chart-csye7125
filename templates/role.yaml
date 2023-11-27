@@ -2,7 +2,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: kafka-consumer-role
-  namespace: kafka
+  namespace: {{ .Release.Namespace }}
 rules:
 - apiGroups: ["batch"]
   resources: ["jobs"]

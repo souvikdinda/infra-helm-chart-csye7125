@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.configMapName }}
-  namespace: kafka
+  namespace: {{ .Release.Namespace }}
 data:
   PORT: "{{ .Values.application.port }}"
   DB_PORT: "{{ .Values.postgres.port }}"
