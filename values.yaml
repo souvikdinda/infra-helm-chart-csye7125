@@ -5,7 +5,7 @@ replicaCount: 1
 
 # Image details for the  consumer application 
 image:
-  repository: quay.io/csye-7125/consumerapplication
+  repository: quay.io/csye-7125/consumerapp
   pullPolicy: IfNotPresent
   tag: latest
 
