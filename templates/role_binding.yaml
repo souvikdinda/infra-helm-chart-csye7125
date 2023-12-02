@@ -5,9 +5,9 @@ metadata:
   namespace: {{ .Release.Namespace }}
 subjects:
 - kind: ServiceAccount
-  name: consumer-sa
+  name: {{ .Release.Name}}-consumer-sa
   namespace: {{ .Release.Namespace }}
 roleRef:
   kind: Role
-  name: kafka-consumer-role
+  name: {{ .Release.Name}}-consumer-role
   apiGroup: rbac.authorization.k8s.io

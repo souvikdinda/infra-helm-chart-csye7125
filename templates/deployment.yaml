@@ -23,7 +23,7 @@ spec:
         {{- include "infra-chart.labels" . | nindent 8 }}
 
     spec:
-      serviceAccountName: consumer-sa
+      serviceAccountName: {{ .Release.Name}}-consumer-sa
       imagePullSecrets:
         - name: quay-creds
       containers:
