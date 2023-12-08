@@ -45,7 +45,7 @@ spec:
         - name: quay-creds
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}:v{{ .Values.image.tag }}"
           ports:
             - name: http
               containerPort: {{ .Values.application.port }}

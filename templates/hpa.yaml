@@ -2,7 +2,7 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "infra-chart.fullname" . }}
+  name: {{ .Release.Name}}-hpa
   labels:
     {{- include "infra-chart.labels" . | nindent 4 }}
   namespace: {{ if .Values.namespace.create }}{{ .Values.namespace.name }}{{ else }}{{ .Release.Namespace }}{{ end }}
