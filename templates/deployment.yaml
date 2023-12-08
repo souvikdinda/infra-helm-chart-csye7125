@@ -1,12 +1,15 @@
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name}}-consumer
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ if .Values.namespace.create }}{{ .Values.namespace.name }}{{ else }}{{ .Release.Namespace }}{{ end }}
   labels:
     {{- include "infra-chart.labels" . | nindent 4 }}
 spec:
+  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
+  {{- end }}
   strategy:
     type: {{ .Values.deploymentStrategy.type }}
     rollingUpdate:
@@ -21,8 +24,22 @@ spec:
     metadata:
       labels:
         {{- include "infra-chart.labels" . | nindent 8 }}
-
+        app : {{ .Release.Name }}
+      annotations:
+        sidecar.istio.io/inject: "true"
     spec:
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - {{ .Release.Name }}
+                topologyKey: topology.kubernetes.io/zone
       serviceAccountName: {{ .Release.Name}}-consumer-sa
       imagePullSecrets:
         - name: quay-creds
@@ -36,3 +53,10 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ .Values.configMapName }}
+          resources:
+            requests:
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
+            limits:
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}

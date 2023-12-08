@@ -1,0 +1,11 @@
+{{- if .Values.namespace.create }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.namespace.name }}
+  labels:
+    {{- range $key, $value := .Values.labels.release }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    # istio-injection: enabled
+{{- end }}
