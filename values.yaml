@@ -84,6 +84,11 @@ kafka:
       replicationFactor: 3
       topics:
         - name: healthcheck
+      args:
+      - -ec
+      - |
+        curl -fsI -X POST http://localhost:15020/quitquitquit
+        echo "Provisioning succeeded"
 
 
 resources:
